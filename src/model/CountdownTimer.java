@@ -1,6 +1,5 @@
 package model;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
@@ -8,7 +7,7 @@ import view.HomePage;
 import view.Results;
 
 public class CountdownTimer {
-    private static int COUNTDOWN_TIME = 90 * 60 * 1000; // 90 minutes in milliseconds
+    private static int COUNTDOWN_TIME = 1 * 60 * 1000; // 90 minutes in milliseconds
     private static final int TIMER_DELAY = 1000; // 1 second
 
     private JLabel label;
@@ -32,6 +31,7 @@ public class CountdownTimer {
             	HomePage p = new HomePage(idStudent, "");
     			p.setVisible(true);
     			p.setContentPane(new Results(idStudent,idTest, mark, usedTime));
+    			p.setSize(900,540);
     			this.stop();
             }
         });
@@ -49,21 +49,21 @@ public class CountdownTimer {
     	return this.remainingTime;
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Countdown Timer");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JLabel label = new JLabel("90:00");
-        frame.add(label);
-        String []mark = new String[1];
-        mark[0] = "1";
-
-        CountdownTimer timer = new CountdownTimer(1, "", label, mark );
-        timer.start();
-
-        frame.pack();
-        frame.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        JFrame frame = new JFrame("Countdown Timer");
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//
+//        JLabel label = new JLabel("90:00");
+//        frame.add(label);
+//        String []mark = new String[1];
+//        mark[0] = "1";
+//
+//        CountdownTimer timer = new CountdownTimer(1, "", label, mark );
+//        timer.start();
+//
+//        frame.pack();
+//        frame.setVisible(true);
+//    }
 
 	public JLabel getLabel() {
 		return label;

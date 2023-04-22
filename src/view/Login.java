@@ -191,7 +191,7 @@ public class Login extends JFrame {
 		panel_1.setLayout(null);
 		
 		JLabel lblnName = new JLabel("Họ tên(*):");
-		lblnName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblnName.setHorizontalAlignment(SwingConstants.LEFT);
 		lblnName.setBackground(new Color(128, 255, 255));
 		lblnName.setBounds(10, 29, 126, 33);
 		panel_1.add(lblnName);
@@ -202,7 +202,7 @@ public class Login extends JFrame {
 		panel_1.add(textFieldName);
 		
 		JLabel lblSchool = new JLabel("Trường học:");
-		lblSchool.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSchool.setHorizontalAlignment(SwingConstants.LEFT);
 		lblSchool.setBackground(new Color(128, 255, 255));
 		lblSchool.setBounds(10, 72, 126, 33);
 		panel_1.add(lblSchool);
@@ -213,19 +213,19 @@ public class Login extends JFrame {
 		panel_1.add(textFieldSchool);
 		
 		JLabel lblYOB = new JLabel("Năm sinh:");
-		lblYOB.setHorizontalAlignment(SwingConstants.CENTER);
+		lblYOB.setHorizontalAlignment(SwingConstants.LEFT);
 		lblYOB.setBackground(new Color(128, 255, 255));
 		lblYOB.setBounds(10, 115, 126, 33);
 		panel_1.add(lblYOB);
 		
 		JLabel lblUserName = new JLabel("Tài khoản(*):");
-		lblUserName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUserName.setHorizontalAlignment(SwingConstants.LEFT);
 		lblUserName.setBackground(new Color(128, 255, 255));
 		lblUserName.setBounds(10, 158, 126, 33);
 		panel_1.add(lblUserName);
 		
 		JLabel lblHTn_1_3 = new JLabel("Mật khẩu(*):");
-		lblHTn_1_3.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHTn_1_3.setHorizontalAlignment(SwingConstants.LEFT);
 		lblHTn_1_3.setBackground(new Color(128, 255, 255));
 		lblHTn_1_3.setBounds(10, 201, 126, 33);
 		panel_1.add(lblHTn_1_3);

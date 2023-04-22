@@ -5,21 +5,17 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.Window;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-
 import connection.QuestionDao;
+import connection.StudentDao;
 import connection.TestDao;
 import model.Questions;
+import model.Student;
 import model.Test;
 
 import javax.swing.JTabbedPane;
@@ -40,10 +36,16 @@ import javax.swing.ListSelectionModel;
 public class ListExams extends JPanel {
 	
 //	private String[] listTests;
+	String name;
 
 	public ListExams(int idStudent, String Subject) {
 		
+		Frame[] frames = Frame.getFrames();
+		
+		System.out.println(frames.length);
+		
 		List<Test> test = new TestDao().getAllTest();
+		List<Student> students = new StudentDao().getAllStudent();
 		
 		setBackground(new Color(255, 255, 255));
 		setSize(940, 503);
@@ -73,10 +75,18 @@ public class ListExams extends JPanel {
 		panel.add(comboBoxReleaseYear);
 		
 		// Return HomePage
+		for (Student s:students) {
+			if (s.getIdStudent() == idStudent) {
+				name = s.getName();
+				break;
+			}
+		}
 		JButton btnBackHomePage = new JButton("");
 		btnBackHomePage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				HomePage p = new HomePage(idStudent, name);
+				p.setVisible(true);
+				frames[1].dispose();
 			}
 		});
 		btnBackHomePage.setIcon(new ImageIcon("C:\\Users\\NTDat\\eclipse-workspace\\PEApp\\src\\img\\back.png"));
@@ -84,6 +94,10 @@ public class ListExams extends JPanel {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btnBackHomePage.setBackground(Color.LIGHT_GRAY);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnBackHomePage.setBackground(new Color(255,255,255));
 			}
 		});
 		btnBackHomePage.setBackground(new Color(255, 255, 255));
@@ -136,6 +150,7 @@ public class ListExams extends JPanel {
 		    	for (Test t : test) {
 		    		List<Questions> allQuestions = new QuestionDao().getAllQuestions(t.getIdTest());
 		    		if (list.getSelectedValue().equals(t.getTitleTest()) && allQuestions.size() == 50) {
+		    			frames[1].dispose();
 			    		HomePage p = new HomePage(idStudent, Subject);
 			   			p.setVisible(true);
 			   			p.setContentPane(new DoExams(idStudent, t.getIdTest()));
@@ -159,6 +174,14 @@ public class ListExams extends JPanel {
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Yêu thích", null, panel_2, null);
 		
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }

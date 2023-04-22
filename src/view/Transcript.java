@@ -5,21 +5,34 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import connection.StudentDao;
 import connection.TranscriptDao;
 import model.Rank;
+import model.Student;
 
 import java.awt.Font;
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JButton;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Transcript extends JPanel {
 	private JTable table;
-	public Transcript(String idTest) {
+	
+	private String name;
+	
+	public Transcript(int idStudent ,String idTest) {
+		
+		Frame[] frames = Frame.getFrames();
 		
 		List<Rank> ranks = new TranscriptDao().getAllRank(idTest);
+		List<Student> students = new StudentDao().getAllStudent();
 		
 		setLayout(null);
 		
@@ -30,7 +43,7 @@ public class Transcript extends JPanel {
 		add(lblNewLabel);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 95, 881, 388);
+		scrollPane.setBounds(10, 95, 881, 330);
 		add(scrollPane);
 		
 		String[] columnNames = {"STT", "Họ tên", "Trường học", "Năm sinh", "Điểm", "Thời gian làm bài"};
@@ -43,6 +56,26 @@ public class Transcript extends JPanel {
 		
 		table = new JTable(model);
 		scrollPane.setViewportView(table);
+		
+		// Return HomePage
+		for (Student s:students) {
+			if (s.getIdStudent() == idStudent) {
+				name = s.getName();
+				break;
+			}
+		}
+		JButton btnBackHomePage = new JButton("Về trang chủ");
+		btnBackHomePage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frames[4].dispose();
+				HomePage p = new HomePage(idStudent, name);
+				p.setVisible(true);
+			}
+		});
+		btnBackHomePage.setBackground(new Color(255, 255, 255));
+		btnBackHomePage.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnBackHomePage.setBounds(747, 435, 144, 48);
+		add(btnBackHomePage);
 		
 	}
 }

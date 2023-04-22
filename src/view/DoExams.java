@@ -2,11 +2,7 @@ package view;
 
 import javax.swing.JPanel;
 import java.awt.Color;
-import java.awt.Component;
-
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
@@ -18,8 +14,8 @@ import model.Questions;
 import model.Test;
 
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,8 +23,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextPane;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListModel;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -44,6 +38,11 @@ public class DoExams extends JPanel {
 	private String usedTime;
 
 	public DoExams(int idStudent,String idTest) {
+		
+		Frame[] frames = Frame.getFrames();
+		
+		//System.out.println(frames.length);
+		
 		List<Test> test = new TestDao().getAllTest(idTest);
 		List<Questions> allQuestions = new QuestionDao().getAllQuestions(idTest);
 		
@@ -246,9 +245,12 @@ public class DoExams extends JPanel {
 								"Bạn có chắc chắn nộp bài không?",
 								"Nộp bài", JOptionPane.YES_NO_OPTION);
 					if (input == 0) {
+						frames[2].dispose();
 						HomePage p = new HomePage(idStudent, "");
 						p.setVisible(true);
 						p.setContentPane(new Results(idStudent,idTest, mark,timer.getUsedTime()));
+						p.setSize(900,540);
+						timer.stop();
 					}
 				}
 				
