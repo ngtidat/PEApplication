@@ -7,16 +7,16 @@ import view.HomePage;
 import view.Results;
 
 public class CountdownTimer {
-    private static int COUNTDOWN_TIME = 1 * 60 * 1000; // 90 minutes in milliseconds
+    private static int COUNTDOWN_TIME = 90 * 60 * 1000; // 90 minutes in milliseconds
     private static final int TIMER_DELAY = 1000; // 1 second
 
     private JLabel label;
     private Timer timer;
     private String remainingTime;
-    private String usedTime;
+    private static String usedTime;
     int second = 0;
 
-    public CountdownTimer(int idStudent, String idTest,JLabel label, String[] mark) {
+    public CountdownTimer(JLabel label) {
         this.label = label;
         this.timer = new Timer(TIMER_DELAY, e -> {
         	second += TIMER_DELAY;
@@ -28,9 +28,9 @@ public class CountdownTimer {
             label.setText(remainingTime);
             usedTime = second / (60 * 1000) + ":" + (second / 1000) % 60;
             if (remainingTime.equals("0:00")) {
-            	HomePage p = new HomePage(idStudent, "");
+            	HomePage p = new HomePage();
     			p.setVisible(true);
-    			p.setContentPane(new Results(idStudent,idTest, mark, usedTime));
+    			p.setContentPane(new Results());
     			p.setSize(900,540);
     			this.stop();
             }
@@ -49,27 +49,11 @@ public class CountdownTimer {
     	return this.remainingTime;
     }
 
-//    public static void main(String[] args) {
-//        JFrame frame = new JFrame("Countdown Timer");
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//
-//        JLabel label = new JLabel("90:00");
-//        frame.add(label);
-//        String []mark = new String[1];
-//        mark[0] = "1";
-//
-//        CountdownTimer timer = new CountdownTimer(1, "", label, mark );
-//        timer.start();
-//
-//        frame.pack();
-//        frame.setVisible(true);
-//    }
-
 	public JLabel getLabel() {
 		return label;
 	}
 
-	public String getUsedTime() {
+	public static String getUsedTime() {
 		return usedTime;
 	}
 }

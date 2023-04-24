@@ -5,11 +5,8 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import connection.StudentDao;
 import connection.TranscriptDao;
 import model.Rank;
-import model.Student;
-
 import java.awt.Font;
 import java.awt.Frame;
 import java.util.ArrayList;
@@ -25,14 +22,11 @@ import java.awt.event.ActionEvent;
 public class Transcript extends JPanel {
 	private JTable table;
 	
-	private String name;
-	
-	public Transcript(int idStudent ,String idTest) {
+	public Transcript() {
 		
 		Frame[] frames = Frame.getFrames();
 		
-		List<Rank> ranks = new TranscriptDao().getAllRank(idTest);
-		List<Student> students = new StudentDao().getAllStudent();
+		List<Rank> ranks = new TranscriptDao().getAllRank(ListExams.getIdTestSelection());
 		
 		setLayout(null);
 		
@@ -58,17 +52,11 @@ public class Transcript extends JPanel {
 		scrollPane.setViewportView(table);
 		
 		// Return HomePage
-		for (Student s:students) {
-			if (s.getIdStudent() == idStudent) {
-				name = s.getName();
-				break;
-			}
-		}
 		JButton btnBackHomePage = new JButton("Về trang chủ");
 		btnBackHomePage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frames[4].dispose();
-				HomePage p = new HomePage(idStudent, name);
+				HomePage p = new HomePage();
 				p.setVisible(true);
 			}
 		});

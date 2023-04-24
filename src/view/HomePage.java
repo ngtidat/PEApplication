@@ -32,20 +32,7 @@ public class HomePage extends JFrame {
 	private static JPanel contentPane;
 	private JTextField txtQuestions;
 
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					HomePage frame = new HomePage("");
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-
-	public HomePage(int idStudent, String name) {
+	public HomePage() {
 		
 		setResizable(false);
 		setTitle("PEApp");
@@ -84,7 +71,7 @@ public class HomePage extends JFrame {
 		menuBar.setLayout(new GridLayout(0,1));
 		panel_1.add(menuBar);
 		
-		JMenu mnName = new JMenu(name);
+		JMenu mnName = new JMenu(Login.getCurrentStudent().getName());
 		mnName.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		mnName.setForeground(new Color(255, 255, 255));
 		menuBar.add(mnName);
@@ -174,75 +161,23 @@ public class HomePage extends JFrame {
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(new Color(255,255,255));
-		panel_3.setBounds(72, 124, 680, 342);
+		panel_3.setBounds(72, 124, 680, 332);
 		panel_2.add(panel_3);
 		panel_3.setLayout(new GridLayout(3, 4, 20, 20));
 		
-		JButton btnMath = new JButton("Toán");
-		// List of math exams		
-		btnMath.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setContentPane(new ListExams(idStudent, btnMath.getText()));
-			}
-		});
-		btnMath.setBackground(new Color(255, 255, 255));
-		btnMath.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel_3.add(btnMath);
-		
-		JButton btnLiterature = new JButton("Ngữ văn");
-		btnLiterature.setBackground(new Color(255, 255, 255));
-		btnLiterature.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel_3.add(btnLiterature);
-		
-		JButton btnEnglish = new JButton("Tiếng Anh");
-		btnEnglish.setBackground(new Color(255, 255, 255));
-		btnEnglish.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel_3.add(btnEnglish);
-		
-		JButton btnHistory = new JButton("Lịch sử");
-		btnHistory.setBackground(new Color(255, 255, 255));
-		btnHistory.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel_3.add(btnHistory);
-		
-		JButton btnPhysics = new JButton("Vật lý");
-		btnPhysics.setBackground(new Color(255, 255, 255));
-		btnPhysics.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel_3.add(btnPhysics);
-		
-		JButton btnGeography = new JButton("Địa lý");
-		btnGeography.setBackground(new Color(255, 255, 255));
-		btnGeography.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel_3.add(btnGeography);
-		
-		JButton btnCivicEducation = new JButton("GDCD");
-		btnCivicEducation.setBackground(new Color(255, 255, 255));
-		btnCivicEducation.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel_3.add(btnCivicEducation);
-		
-		JButton btnInformatics = new JButton("Tin học");
-		btnInformatics.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnInformatics.setBackground(new Color(255, 255, 255));
-		panel_3.add(btnInformatics);
-		
-		JButton btnChemistry = new JButton("Hóa học");
-		btnChemistry.setBackground(new Color(255, 255, 255));
-		btnChemistry.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel_3.add(btnChemistry);
-		
-		JButton btnBiology = new JButton("Sinh học");
-		btnBiology.setBackground(new Color(255, 255, 255));
-		btnBiology.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel_3.add(btnBiology);
-		
-		JButton btnTechnology = new JButton("Công nghệ");
-		btnTechnology.setBackground(new Color(255, 255, 255));
-		btnTechnology.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel_3.add(btnTechnology);
-		
-		JButton btnSchedule = new JButton("TKB");
-		btnSchedule.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnSchedule.setBackground(new Color(255, 255, 255));
-		panel_3.add(btnSchedule);
+		String subjects[] = {"Toán học","Ngữ văn","Tiếng anh","Lịch sử","Vật lý",
+	                            "Địa lý","GDCD","Tin học","Hóa học","Sinh học","Công nghệ","TKB"};
+		for (String s:subjects) {
+			JButton btnSubject = new JButton(s);
+			btnSubject.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					setContentPane(new ListExams(s));
+				}
+			});
+			btnSubject.setBackground(new Color(255, 255, 255));
+			btnSubject.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			panel_3.add(btnSubject);
+		}
 	}
 
 	private void setCountDown(JLabel lblCountDownDay) {
@@ -273,5 +208,4 @@ public class HomePage extends JFrame {
 	public void setContentPane(Container contentPane) {
 		super.setContentPane(contentPane);
 	}
-
 }

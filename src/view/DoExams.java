@@ -2,7 +2,10 @@ package view;
 
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
@@ -34,19 +37,26 @@ import javax.swing.ImageIcon;
 
 public class DoExams extends JPanel {
 	
-	private String[] mark;
-	private String usedTime;
+	private static String[] mark;
+	private static String usedTime;
+	private static List<Questions> allQuestions;
 
-	public DoExams(int idStudent,String idTest) {
+	public static List<Questions> getAllQuestions() {
+		return allQuestions;
+	}
+
+	public static void setAllQuestions(List<Questions> allQuestions) {
+		DoExams.allQuestions = allQuestions;
+	}
+
+	public DoExams() {
 		
 		Frame[] frames = Frame.getFrames();
 		
-		//System.out.println(frames.length);
+		DoExams.setAllQuestions(new QuestionDao().getAllQuestions(ListExams.getIdTestSelection()));
+		List<Test> test = new TestDao().getAllTestWithId(ListExams.getIdTestSelection());
 		
-		List<Test> test = new TestDao().getAllTest(idTest);
-		List<Questions> allQuestions = new QuestionDao().getAllQuestions(idTest);
-		
-		mark = new String[51];
+		mark = new String[DoExams.getAllQuestions().size()+1];
 		Arrays.fill(mark, "0");
 		
 		setLayout(null);
@@ -61,11 +71,11 @@ public class DoExams extends JPanel {
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panel.add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("Thời gian: 90 phút\r\n");
+		JLabel lblNewLabel_1 = new JLabel("Thời gian: "+ test.get(0).getDefaultTime()  +"\r\n");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panel.add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_2 = new JLabel("Mã đề: " + test.get(0).getIdTest().substring(test.get(0).getIdTest().length() - 3));
+		JLabel lblNewLabel_2 = new JLabel("Mã đề: " + ListExams.getIdTestSelection().substring(ListExams.getIdTestSelection().length()-3));
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panel.add(lblNewLabel_2);
 		
@@ -86,11 +96,16 @@ public class DoExams extends JPanel {
 		scrollPane.setBounds(10, 55, 150, 371);
 		panel_1.add(scrollPane);
 		
+		// Set number of questions
+		int numberOfQuestions = DoExams.getAllQuestions().size();
+		String[] itemList = new String[numberOfQuestions];
+		for (int i = 0; i < numberOfQuestions; i++) {
+			itemList[i] = "Câu " + (i+1);
+		}
+		
 		JList list = new JList();
-		list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		list.setFont(new Font("Sitka Small", Font.PLAIN, 14));
 		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Câu 1", "Câu 2", "Câu 3", "Câu 4", "Câu 5", "Câu 6", "Câu 7", "Câu 8", "Câu 9", "Câu 10", "Câu 11", "Câu 12", "Câu 13", "Câu 14", "Câu 15", "Câu 16", "Câu 17", "Câu 18", "Câu 19", "Câu 20", "Câu 21", "Câu 22", "Câu 23", "Câu 24", "Câu 25", "Câu 26", "Câu 27", "Câu 28", "Câu 29", "Câu 30", "Câu 31", "Câu 32", "Câu 33", "Câu 34", "Câu 35", "Câu 36", "Câu 37", "Câu 38", "Câu 39", "Câu 40", "Câu 41", "Câu 42", "Câu 43", "Câu 44", "Câu 45", "Câu 46", "Câu 47", "Câu 48", "Câu 49", "Câu 50"};
+			String[] values = itemList;
 			public int getSize() {
 				return values.length;
 			}
@@ -98,10 +113,11 @@ public class DoExams extends JPanel {
 				return values[index];
 			}
 		});
+		list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		list.setFont(new Font("Sitka Small", Font.PLAIN, 14));
 		list.setSelectedIndex(0);
+		list.setCellRenderer(new MyCellRenderer());
 		scrollPane.setViewportView(list);
-		
-		
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(new Color(255, 255, 255));
@@ -110,8 +126,8 @@ public class DoExams extends JPanel {
 		panel_2.setLayout(null);
 		
 		JLabel lblImage = new JLabel();
-		if (allQuestions.get(0).getImg() != null)
-			lblImage.setIcon(new ImageIcon(allQuestions.get(0).getImg()));
+		if (DoExams.getAllQuestions().get(0).getImg() != null)
+			lblImage.setIcon(new ImageIcon(DoExams.getAllQuestions().get(0).getImg()));
 		else lblImage.setText("");
 		lblImage.setBounds(0, 95, 687, 145);
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
@@ -124,18 +140,17 @@ public class DoExams extends JPanel {
 		panel_3.setLayout(null);
 		
 		// Select Answer
-		JRadioButton A = new JRadioButton(allQuestions.get(0).getAnswer1());
+		JRadioButton A = new JRadioButton(DoExams.getAllQuestions().get(0).getAnswer1());
 		A.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mark[list.getSelectedIndex()+1] = "A";
 				System.out.println((list.getSelectedIndex()) + 1 + "" + mark[list.getSelectedIndex()+1]);
-				
 			}
 		});
 		A.setBounds(6, 17, 280, 49);
 		panel_3.add(A);
 		
-		JRadioButton B = new JRadioButton(allQuestions.get(0).getAnswer2());
+		JRadioButton B = new JRadioButton(DoExams.getAllQuestions().get(0).getAnswer2());
 		B.setBounds(6, 68, 280, 49);
 		B.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -145,7 +160,7 @@ public class DoExams extends JPanel {
 		});
 		panel_3.add(B);
 		
-		JRadioButton C = new JRadioButton(allQuestions.get(0).getAnswer3());
+		JRadioButton C = new JRadioButton(DoExams.getAllQuestions().get(0).getAnswer3());
 		C.setBounds(401, 17, 280, 49);
 		C.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -155,7 +170,7 @@ public class DoExams extends JPanel {
 		});
 		panel_3.add(C);
 		
-		JRadioButton D = new JRadioButton(allQuestions.get(0).getAnswer4());
+		JRadioButton D = new JRadioButton(DoExams.getAllQuestions().get(0).getAnswer4());
 		D.setBounds(401, 70, 280, 47);
 		D.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -174,7 +189,7 @@ public class DoExams extends JPanel {
 		JTextPane txtpnQuestion = new JTextPane();
 		txtpnQuestion.setEditable(false);
 		txtpnQuestion.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		txtpnQuestion.setText(allQuestions.get(0).getQuestion());
+		txtpnQuestion.setText(DoExams.getAllQuestions().get(0).getQuestion());
 		txtpnQuestion.setBounds(0, 0, 687, 85);
 		panel_2.add(txtpnQuestion);
 		
@@ -185,13 +200,13 @@ public class DoExams extends JPanel {
 		lblCountDownTimer.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblCountDownTimer.setBackground(new Color(255, 255, 255));
 		lblCountDownTimer.setBounds(788, 10, 89, 74);
-		CountdownTimer timer = new CountdownTimer(idStudent, idTest,lblCountDownTimer,mark);
+		CountdownTimer timer = new CountdownTimer(lblCountDownTimer);
         timer.start();
 		add(lblCountDownTimer);
 		
 		list.addListSelectionListener(e -> {
 			    if (!e.getValueIsAdjusting()) {
-			    	for (Questions q:allQuestions) {
+			    	for (Questions q : DoExams.getAllQuestions()) {
 			    		if (list.getSelectedIndex() + 1 == q.getNumQuestion()) {
 			    			txtpnQuestion.setText("Câu " + q.getNumQuestion() + ": " + q.getQuestion());
 			    			A.setText(q.getAnswer1());
@@ -214,17 +229,18 @@ public class DoExams extends JPanel {
 			    		if (mark[list.getSelectedIndex()+1].equals("B")) B.setSelected(true);
 			    		if (mark[list.getSelectedIndex()+1].equals("C")) C.setSelected(true);
 			    		if (mark[list.getSelectedIndex()+1].equals("D")) D.setSelected(true);
-			    	}
+			    	}	
 			}
 		});
 		
+		//Submit
 		JButton btnSubmit = new JButton("Nộp bài");
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				boolean c = true;
 
-				for (int i = 1; i <= 50; i++) 
+				for (int i = 1; i <= DoExams.getAllQuestions().size(); i++) 
 					if (mark[i].equals("0")) {
 						c = false;
 						System.out.println("The exam is not done yet");
@@ -245,15 +261,15 @@ public class DoExams extends JPanel {
 								"Bạn có chắc chắn nộp bài không?",
 								"Nộp bài", JOptionPane.YES_NO_OPTION);
 					if (input == 0) {
-						frames[2].dispose();
-						HomePage p = new HomePage(idStudent, "");
-						p.setVisible(true);
-						p.setContentPane(new Results(idStudent,idTest, mark,timer.getUsedTime()));
-						p.setSize(900,540);
 						timer.stop();
+						DoExams.setUsedTime(lblCountDownTimer.getText());
+						frames[2].dispose();
+						HomePage p = new HomePage();
+						p.setVisible(true);
+						p.setContentPane(new Results());
+						p.setSize(900,540);
 					}
 				}
-				
 			}
 		});
 		btnSubmit.setBackground(new Color(0, 255, 0));
@@ -262,13 +278,35 @@ public class DoExams extends JPanel {
 		panel_1.add(btnSubmit);
 		
 	}
-	
 
-	public String[] getMark() {
+	public static String[] getMark() {
 		return mark;
 	}
-	
-	public String getUsedTime(){
-		return this.usedTime;
+
+	public static void setMark(String[] mark) {
+		DoExams.mark = mark;
 	}
+
+	public static String getUsedTime() {
+		return usedTime;
+	}
+
+	public static void setUsedTime(String usedTime) {
+		DoExams.usedTime = usedTime;
+	}
+	
+	public class MyCellRenderer extends DefaultListCellRenderer {
+	    @Override
+	    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+	        Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+	        if (!mark[index+1].equals("0")) {
+	            c.setBackground(Color.GREEN);
+	        }else {
+                setBackground(java.awt.Color.WHITE);
+                setForeground(java.awt.Color.BLACK);
+            }
+	        return c;
+	    }
+	}
+	
 }

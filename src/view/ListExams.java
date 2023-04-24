@@ -9,13 +9,9 @@ import java.awt.Font;
 import java.awt.Frame;
 
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.DefaultComboBoxModel;
-import connection.QuestionDao;
-import connection.StudentDao;
+
 import connection.TestDao;
-import model.Questions;
-import model.Student;
 import model.Test;
 
 import javax.swing.JTabbedPane;
@@ -25,7 +21,6 @@ import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.AbstractListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JScrollBar;
@@ -35,17 +30,22 @@ import javax.swing.ListSelectionModel;
 
 public class ListExams extends JPanel {
 	
-//	private String[] listTests;
-	String name;
+	private static String idTestSelection;
+	List<Test> tests;
 
-	public ListExams(int idStudent, String Subject) {
+	public static String getIdTestSelection() {
+		return idTestSelection;
+	}
+
+	public static void setIdTestSelection(String idTestSelection) {
+		ListExams.idTestSelection = idTestSelection;
+	}
+
+	public ListExams(String subject) {
 		
 		Frame[] frames = Frame.getFrames();
 		
-		System.out.println(frames.length);
-		
-		List<Test> test = new TestDao().getAllTest();
-		List<Student> students = new StudentDao().getAllStudent();
+		tests = new TestDao().getAllTestWithSubject(subject, 2022);
 		
 		setBackground(new Color(255, 255, 255));
 		setSize(940, 503);
@@ -57,34 +57,37 @@ public class ListExams extends JPanel {
 		add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel(Subject);
+		JLabel lblNewLabel = new JLabel(subject);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel.setBackground(new Color(255, 255, 255));
 		lblNewLabel.setBounds(55, 0, 155, 50);
 		panel.add(lblNewLabel);
 		
+		// Select Release year
 		JComboBox comboBoxReleaseYear = new JComboBox();
 		comboBoxReleaseYear.setOpaque(true);
 		comboBoxReleaseYear.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		comboBoxReleaseYear.setModel(new DefaultComboBoxModel(new String[] {"2023", "2022", "2021", "2020", "2019", "2018"}));
-		comboBoxReleaseYear.setSelectedIndex(2);
+		comboBoxReleaseYear.setSelectedIndex(1);
 		comboBoxReleaseYear.setBackground(new Color(255, 255, 255));
 		comboBoxReleaseYear.setBounds(830, 0, 100, 51);
 		comboBoxReleaseYear.setBorder(null);
+		comboBoxReleaseYear.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				tests = new TestDao().getAllTestWithSubject(subject, 2021);
+			}
+		});
 		panel.add(comboBoxReleaseYear);
 		
 		// Return HomePage
-		for (Student s:students) {
-			if (s.getIdStudent() == idStudent) {
-				name = s.getName();
-				break;
-			}
-		}
 		JButton btnBackHomePage = new JButton("");
 		btnBackHomePage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				HomePage p = new HomePage(idStudent, name);
+				HomePage p = new HomePage();
 				p.setVisible(true);
 				frames[1].dispose();
 			}
@@ -118,11 +121,10 @@ public class ListExams extends JPanel {
 		scrollPane.setBounds(10, 10, 915, 408);
 		panelExams.add(scrollPane);
 		
-		
 		String[] listTests = new String[1000];
 		int i = 0;
 		
-		for (Test t : test) {
+		for (Test t : tests) {
 			listTests[i] = new String(t.getTitleTest());
 			i++;
 		}
@@ -143,29 +145,29 @@ public class ListExams extends JPanel {
 		scrollPane.setViewportView(list);
 		
 		// Do exam
-		
 		list.addListSelectionListener(e -> {
 		    if (!e.getValueIsAdjusting()) {
-		    	int c = 0;
-		    	for (Test t : test) {
-		    		List<Questions> allQuestions = new QuestionDao().getAllQuestions(t.getIdTest());
-		    		if (list.getSelectedValue().equals(t.getTitleTest()) && allQuestions.size() == 50) {
+		    	
+//		    	int c = 0;
+		    	for (Test t : tests) {
+		    		if (list.getSelectedValue().equals(t.getTitleTest())) {
+		    			ListExams.setIdTestSelection(t.getIdTest());
 		    			frames[1].dispose();
-			    		HomePage p = new HomePage(idStudent, Subject);
+			    		HomePage p = new HomePage();
 			   			p.setVisible(true);
-			   			p.setContentPane(new DoExams(idStudent, t.getIdTest()));
+			   			p.setContentPane(new DoExams());
 			   			p.setSize(900,530);
-			   			c = 1;
+//			   			c = 1;
 			   			break;
 			   		}
 		    	}
-		    	if (c == 0) {
-		    		JFrame frame = new JFrame();
-					JOptionPane.showMessageDialog(frame, 
-							"Đề vẫn chưa được cập nhập!",
-							"Thông báo",
-							JOptionPane.INFORMATION_MESSAGE);
-		    	}
+//		    	if (c == 0 || allQuestions.size() == 0) {
+//		    		JFrame frame = new JFrame();
+//					JOptionPane.showMessageDialog(frame, 
+//							"Đề vẫn chưa được cập nhập!",
+//							"Thông báo",
+//							JOptionPane.INFORMATION_MESSAGE);
+//		    	}
 		    }	
 		});
 		
@@ -174,14 +176,6 @@ public class ListExams extends JPanel {
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Yêu thích", null, panel_2, null);
 		
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 }

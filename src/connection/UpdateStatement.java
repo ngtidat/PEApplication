@@ -17,21 +17,17 @@ public class UpdateStatement {
 		try {
 			PreparedStatement pst = con.prepareStatement(sql);
 			
-			System.out.println(student);
-			
 			pst.setNString(1, student.getName());
 			pst.setNString(2, student.getSchool());
 			pst.setInt(3, student.getYearOfBirth());
 			pst.setString(4, student.getUserName());
 			pst.setString(5, student.getPassword());
 			
-			int rs = pst.executeUpdate();
-			
-			System.out.println(rs);
+			pst.executeUpdate();
 			
 		} catch (SQLException e) {
 			System.out.println("Insert fail");
-		}	
+		}
 	}
 	
 	public static void insertTranscript(Transcript transcript) {
@@ -42,16 +38,12 @@ public class UpdateStatement {
 		try {
 			PreparedStatement pst = con.prepareStatement(sql);
 			
-			System.out.println(transcript);
-			
 			pst.setInt(1, transcript.getIdStudent());
 			pst.setString(2, transcript.getIdTest());
 			pst.setDouble(3, transcript.getScore());
 			pst.setString(4, transcript.getUsedTime());
 			
-			int rs = pst.executeUpdate();
-			
-			System.out.println(rs);
+			pst.executeUpdate();
 			
 		} catch (SQLException e) {
 			System.out.println("Insert fail");

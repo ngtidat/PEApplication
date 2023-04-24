@@ -14,7 +14,6 @@ public class StudentDao {
 	public List<Student> getAllStudent(){
 		List<Student> students = new ArrayList<>();
 		Connection con = JDBCConnection.getJDBCConnection();
-		if (con != null) System.out.println("Successfull");
 		
 		String sql = "Select *from student";
 		

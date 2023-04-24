@@ -12,9 +12,8 @@ import javax.swing.JTextPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import connection.QuestionDao;
 import connection.UpdateStatement;
-import model.Questions;
+import model.CountdownTimer;
 import model.Transcript;
 
 import javax.swing.JButton;
@@ -23,34 +22,25 @@ import java.awt.event.ActionEvent;
 
 public class Results extends JPanel {
 	
-	private String idTest;
-	private String []mark;
-	private final double pointEachQuestion = 0.2;
 
-	public Results(int idStudent,String idTest,String[] mark, String usedTime) {
+	public Results() {
 		
 		Frame[] frames = Frame.getFrames();
-		
-		this.idTest = idTest;
-		this.mark = new String[mark.length];
-		System.arraycopy(mark, 0, this.mark, 0, mark.length);
-		
-		List<Questions> allQuestions = new QuestionDao().getAllQuestions(idTest);
 		
 		setLayout(null);
 		
 		JTextPane txtpnSCuTr = new JTextPane();
 		txtpnSCuTr.setEditable(false);
 		txtpnSCuTr.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		txtpnSCuTr.setText("Số câu trả lời đúng: "+ countCorrectAnswers() + "\r\n" + "Điểm thi: " + getScore(pointEachQuestion));
+		txtpnSCuTr.setText("Số câu trả lời đúng: "+ countCorrectAnswers() + "\r\n" + "Điểm thi: " + getScore());
 		txtpnSCuTr.setBounds(10, 10, 840, 70);
 		add(txtpnSCuTr);
 		
 		//
 		String[] columnNames = {"STT", "Câu trả lời", "Đáp án đúng"};
 		List<Object[]> dataList = new ArrayList<>();
-		for (int i = 1; i <= 50; i++) {
-			dataList.add(new Object[] {i, mark[i], allQuestions.get(i-1).getCorrectAnswer()});
+		for (int i = 1; i <= DoExams.getAllQuestions().size(); i++) {
+			dataList.add(new Object[] {i, DoExams.getMark()[i], DoExams.getAllQuestions().get(i-1).getCorrectAnswer()});
 		}
 		Object[][] data = dataList.toArray(new Object[0][0]);
 		DefaultTableModel model = new DefaultTableModel(data, columnNames);
@@ -62,22 +52,23 @@ public class Results extends JPanel {
         pane.setSize(840, 338);
         add(pane, BorderLayout.CENTER);
         
+        // Rank
         JButton btnRank = new JButton("Bảng xếp hạng");
         btnRank.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		Transcript transcript = new Transcript();
-        		transcript.setIdStudent(idStudent);
-        		transcript.setIdTest(idTest);
-        		transcript.setScore(getScore(pointEachQuestion));
-        		transcript.setUsedTime(usedTime);
+        		transcript.setIdStudent(Login.getCurrentStudent().getIdStudent());
+        		transcript.setIdTest(ListExams.getIdTestSelection());
+        		transcript.setScore(getScore());
+        		transcript.setUsedTime(CountdownTimer.getUsedTime());
         		
         		UpdateStatement.insertTranscript(transcript);
         		
         		if (frames.length >= 5)
         			frames[4].dispose();
-        		HomePage p = new HomePage(idStudent, "");
+        		HomePage p = new HomePage();
         		p.setVisible(true);
-				p.setContentPane(new view.Transcript(idStudent,idTest));
+				p.setContentPane(new view.Transcript());
 				p.setSize(930, 540);
         	}
         });
@@ -87,18 +78,17 @@ public class Results extends JPanel {
         
 	}
 
-	public double getScore(double scoreEachQuetion) {
+	public double getScore() {
+		double scoreEachQuetion = Math.round(10.0/DoExams.getAllQuestions().size()*100.0)/100.0;
 		
 		return Math.round(this.countCorrectAnswers()*scoreEachQuetion*100.0)/100.0;
 	}
 
 	public int countCorrectAnswers() {
-		List<Questions> allQuestions = new QuestionDao().getAllQuestions(idTest);
-		
 		int cnt = 0;
 		
-		for (int i = 0; i < 50; i++) {
-			if (mark[i+1].equals(allQuestions.get(i).getCorrectAnswer())) cnt++;
+		for (int i = 0; i < DoExams.getAllQuestions().size(); i++) {
+			if (DoExams.getMark()[i+1].equals(DoExams.getAllQuestions().get(i).getCorrectAnswer())) cnt++;
 		}
 		return cnt;
 	}

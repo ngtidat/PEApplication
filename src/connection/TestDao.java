@@ -11,17 +11,18 @@ import model.Test;
 
 public class TestDao {
 	
-	public List<Test> getAllTest(String id){
+	public List<Test> getAllTestWithSubject(String subject, int year){
 		List<Test> test = new ArrayList<>();
 		Connection con = JDBCConnection.getJDBCConnection();
 		if (con != null) System.out.println("Connect to tests successfull");
 		
-		String sql = "Select *from test where idTest = ?";
+		String sql = "Select *from test where nameSubject = ? and releaseYear = ?";
 		
 		try {
 			PreparedStatement preparedStatement = con.prepareStatement(sql);
 			
-			preparedStatement.setString(1,id);
+			preparedStatement.setString(1,subject);
+			preparedStatement.setInt(2, year);
 			
 			ResultSet rs = preparedStatement.executeQuery();
 			
@@ -44,16 +45,18 @@ public class TestDao {
 		
 		return test;
 	}
-
-	public List<Test> getAllTest(){
+	
+	public List<Test> getAllTestWithId(String idTest){
 		List<Test> test = new ArrayList<>();
 		Connection con = JDBCConnection.getJDBCConnection();
 		if (con != null) System.out.println("Connect to tests successfull");
 		
-		String sql = "Select *from test";
+		String sql = "Select *from test where idTest = ?";
 		
 		try {
 			PreparedStatement preparedStatement = con.prepareStatement(sql);
+			
+			preparedStatement.setString(1,idTest);
 			
 			ResultSet rs = preparedStatement.executeQuery();
 			
