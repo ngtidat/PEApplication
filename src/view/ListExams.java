@@ -148,7 +148,6 @@ public class ListExams extends JPanel {
 		list.addListSelectionListener(e -> {
 		    if (!e.getValueIsAdjusting()) {
 		    	
-//		    	int c = 0;
 		    	for (Test t : tests) {
 		    		if (list.getSelectedValue().equals(t.getTitleTest())) {
 		    			ListExams.setIdTestSelection(t.getIdTest());
@@ -157,17 +156,9 @@ public class ListExams extends JPanel {
 			   			p.setVisible(true);
 			   			p.setContentPane(new DoExams());
 			   			p.setSize(900,530);
-//			   			c = 1;
 			   			break;
 			   		}
 		    	}
-//		    	if (c == 0 || allQuestions.size() == 0) {
-//		    		JFrame frame = new JFrame();
-//					JOptionPane.showMessageDialog(frame, 
-//							"Đề vẫn chưa được cập nhập!",
-//							"Thông báo",
-//							JOptionPane.INFORMATION_MESSAGE);
-//		    	}
 		    }	
 		});
 		

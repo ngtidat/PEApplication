@@ -21,7 +21,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class Results extends JPanel {
-	
 
 	public Results() {
 		

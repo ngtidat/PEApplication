@@ -37,6 +37,15 @@ import javax.swing.ImageIcon;
 
 public class DoExams extends JPanel {
 	
+	private static int defaultTime;
+	public static int getDefaultTime() {
+		return defaultTime;
+	}
+
+	public static void setDefaultTime(int defaultTime) {
+		DoExams.defaultTime = defaultTime;
+	}
+
 	private static String[] mark;
 	private static String usedTime;
 	private static List<Questions> allQuestions;
@@ -55,6 +64,7 @@ public class DoExams extends JPanel {
 		
 		DoExams.setAllQuestions(new QuestionDao().getAllQuestions(ListExams.getIdTestSelection()));
 		List<Test> test = new TestDao().getAllTestWithId(ListExams.getIdTestSelection());
+		System.out.println(test.get(0));
 		
 		mark = new String[DoExams.getAllQuestions().size()+1];
 		Arrays.fill(mark, "0");
@@ -194,13 +204,18 @@ public class DoExams extends JPanel {
 		panel_2.add(txtpnQuestion);
 		
 		// Time
+		
+		String t = test.get(0).getDefaultTime().substring(0, 2);
+		defaultTime = Integer.parseInt(t);
+//		System.out.println(defaultTime);
+		
 		JLabel lblCountDownTimer = new JLabel("90:00");
 		lblCountDownTimer.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCountDownTimer.setOpaque(true);
 		lblCountDownTimer.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblCountDownTimer.setBackground(new Color(255, 255, 255));
 		lblCountDownTimer.setBounds(788, 10, 89, 74);
-		CountdownTimer timer = new CountdownTimer(lblCountDownTimer);
+		CountdownTimer timer = new CountdownTimer(lblCountDownTimer, defaultTime);
         timer.start();
 		add(lblCountDownTimer);
 		

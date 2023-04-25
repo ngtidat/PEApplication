@@ -7,8 +7,8 @@ import view.HomePage;
 import view.Results;
 
 public class CountdownTimer {
-    private static int COUNTDOWN_TIME = 90 * 60 * 1000; // 90 minutes in milliseconds
-    private static final int TIMER_DELAY = 1000; // 1 second
+    private static int COUNTDOWN_TIME ; // 90 minutes in milliseconds
+    private final int TIMER_DELAY = 1000; // 1 second
 
     private JLabel label;
     private Timer timer;
@@ -16,7 +16,9 @@ public class CountdownTimer {
     private static String usedTime;
     int second = 0;
 
-    public CountdownTimer(JLabel label) {
+    public CountdownTimer(JLabel label, int defaultTime) {
+    	CountdownTimer.setCOUNTDOWN_TIME(defaultTime);
+    	
         this.label = label;
         this.timer = new Timer(TIMER_DELAY, e -> {
         	second += TIMER_DELAY;
@@ -56,4 +58,13 @@ public class CountdownTimer {
 	public static String getUsedTime() {
 		return usedTime;
 	}
+
+	public static int getCOUNTDOWN_TIME() {
+		return COUNTDOWN_TIME;
+	}
+
+	public static void setCOUNTDOWN_TIME(int cOUNTDOWN_TIME) {
+		COUNTDOWN_TIME = cOUNTDOWN_TIME * 60 * 1000;
+	}
+
 }

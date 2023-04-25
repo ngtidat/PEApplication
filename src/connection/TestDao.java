@@ -35,6 +35,7 @@ public class TestDao {
 				t.setReleaseYear(rs.getInt("releaseYear"));
 				t.setSchool(rs.getNString("school"));
 				t.setNumberOfQuestions(rs.getInt("numberOfQuestions"));
+				t.setDefaultTime(rs.getString("defaultTime"));
 				t.setIdAdmin(rs.getString("idAdmin"));
 				
 				test.add(t);
@@ -68,6 +69,7 @@ public class TestDao {
 				t.setNameSubject(rs.getNString("nameSubject"));
 				t.setReleaseYear(rs.getInt("releaseYear"));
 				t.setSchool(rs.getNString("school"));
+				t.setDefaultTime(rs.getString("defaultTime"));
 				t.setNumberOfQuestions(rs.getInt("numberOfQuestions"));
 				t.setIdAdmin(rs.getString("idAdmin"));
 				

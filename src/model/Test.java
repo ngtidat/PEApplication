@@ -7,7 +7,7 @@ public class Test {
 	private String nameSubject;
 	private int releaseYear;
 	private int numberOfQuestions;
-	private final String defaultTime = "90:00";
+	private String defaultTime;
 	private String school;
 	private String idAdmin;
 	
@@ -51,10 +51,15 @@ public class Test {
 		this.numberOfQuestions = numberOfQuestions;
 	}
 	
+	
 	public String getDefaultTime() {
 		return defaultTime;
 	}
-	
+
+	public void setDefaultTime(String defaultTime) {
+		this.defaultTime = defaultTime;
+	}
+
 	public String getSchool() {
 		return school;
 	}
@@ -69,5 +74,12 @@ public class Test {
 	
 	public void setIdAdmin(String idAdmin) {
 		this.idAdmin = idAdmin;
+	}
+
+	@Override
+	public String toString() {
+		return "Test [idTest=" + idTest + ", titleTest=" + titleTest + ", nameSubject=" + nameSubject + ", releaseYear="
+				+ releaseYear + ", numberOfQuestions=" + numberOfQuestions + ", defaultTime=" + defaultTime
+				+ ", school=" + school + ", idAdmin=" + idAdmin + "]";
 	}
 }
