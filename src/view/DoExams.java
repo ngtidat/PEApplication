@@ -10,8 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import connection.QuestionDao;
-import connection.TestDao;
+import connection.DbManager;
 import model.CountdownTimer;
 import model.Questions;
 import model.Test;
@@ -62,8 +61,8 @@ public class DoExams extends JPanel {
 		
 		Frame[] frames = Frame.getFrames();
 		
-		DoExams.setAllQuestions(new QuestionDao().getAllQuestions(ListExams.getIdTestSelection()));
-		List<Test> test = new TestDao().getAllTestWithId(ListExams.getIdTestSelection());
+		DoExams.setAllQuestions(new DbManager().getAllQuestions(ListExams.getIdTestSelection()));
+		List<Test> test = new DbManager().getAllTestWithId(ListExams.getIdTestSelection());
 		System.out.println(test.get(0));
 		
 		mark = new String[DoExams.getAllQuestions().size()+1];

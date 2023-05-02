@@ -5,7 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import connection.TranscriptDao;
+import connection.DbManager;
 import model.Rank;
 import java.awt.Font;
 import java.awt.Frame;
@@ -26,7 +26,7 @@ public class Transcript extends JPanel {
 		
 		Frame[] frames = Frame.getFrames();
 		
-		List<Rank> ranks = new TranscriptDao().getAllRank(ListExams.getIdTestSelection());
+		List<Rank> ranks = new DbManager().getAllRank(ListExams.getIdTestSelection());
 		
 		setLayout(null);
 		

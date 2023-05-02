@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import connection.StudentDao;
+import connection.DbManager;
 import connection.UpdateStatement;
 import model.PasswordEncryption;
 import model.Student;
@@ -118,7 +118,7 @@ public class Login extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				List<Student> students = new StudentDao().getAllStudent();
+				List<Student> students = new DbManager().getAllStudent();
 				
 				// Encrypt password
 				String password = new String();
@@ -241,7 +241,7 @@ public class Login extends JFrame {
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
 				
-				List<Student> students = new StudentDao().getAllStudent();
+				List<Student> students = new DbManager().getAllStudent();
 				
 				if (textFieldName.getText().trim().equals("") || 
 						textFieldUserName.getText().trim().equals("") ||

@@ -11,7 +11,7 @@ import java.awt.Frame;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-import connection.TestDao;
+import connection.DbManager;
 import model.Test;
 
 import javax.swing.JTabbedPane;
@@ -45,7 +45,7 @@ public class ListExams extends JPanel {
 		
 		Frame[] frames = Frame.getFrames();
 		
-		tests = new TestDao().getAllTestWithSubject(subject, 2022);
+		tests = new DbManager().getAllTestWithSubject(subject, 2022);
 		
 		setBackground(new Color(255, 255, 255));
 		setSize(940, 503);
@@ -78,7 +78,7 @@ public class ListExams extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				tests = new TestDao().getAllTestWithSubject(subject, 2021);
+				tests = new DbManager().getAllTestWithSubject(subject, 2021);
 			}
 		});
 		panel.add(comboBoxReleaseYear);
