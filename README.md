@@ -4,4 +4,4 @@
 3. Thay đổi dẫn đến thư mục bin của project vừa tải: cd + đường dẫn
 VD: cd /d C:\Users\NTDat\eclipse-workspace\PEApp\bin
 4. Chạy chương trình bằng câu lệnh: java view/Login
-5. Hoàn thành
+5. Hoàn thành (do cần sử dụng database nên người dùng cần tạo 1 DB để sử dụng app, người dùng tạo DB theo báo cáo trong project)
